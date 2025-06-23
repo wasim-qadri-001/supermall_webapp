@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login - Super Mall</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+      <p id="loginError" style="color: red"></p>
+    </div>
+
+    <script type="module">
+      import { auth } from "./src/firebase/firebase-config.js";
+      import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+      import log from "./src/js/logging.js";
+
+      const loginForm = document.getElementById("loginForm");
+      const errorBox = document.getElementById("loginError");
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            log.info("Admin logged in:", email);
+            window.location.href = "admin.html";
+          })
+          .catch((error) => {
+            log.error("Login failed:", error.message);
+            errorBox.textContent = "Invalid credentials. Please try again.";
+          });
+      });
+    </script>
+  </body>
+</html>

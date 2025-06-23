@@ -1,0 +1,41 @@
+/ admin.html (simple layout)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+  </head>
+  <body>
+    <h2>Admin Dashboard</h2>
+    <input type="text" id="shopName" placeholder="Shop Name" />
+    <input type="text" id="shopLocation" placeholder="Shop Location" />
+    <button onclick="createShop()">Add Shop</button>
+
+    <script type="module">
+      import { db } from "../firebase/firebase-config.js";
+      import {
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+      import log from "./logging.js";
+
+      window.createShop = async function () {
+        const name = document.getElementById("shopName").value;
+        const location = document.getElementById("shopLocation").value;
+
+        try {
+          const docRef = await addDoc(collection(db, "shops"), {
+            name,
+            location,
+          });
+          log.info("Shop added:", name);
+          alert("Shop Created Successfully");
+        } catch (e) {
+          log.error("Error adding shop:", e);
+          alert("Failed to Create Shop");
+        }
+      };
+    </script>
+  </body>
+</html>
