@@ -17,7 +17,4 @@ async function displayShops() {
     shopContainer.appendChild(div);
   });
 }
-
-log.info("New shop added:", shopData);
-log.error("Failed to fetch offers:", error);
 displayShops();
