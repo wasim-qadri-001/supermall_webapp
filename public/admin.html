@@ -1,41 +1,179 @@
-/ admin.html (simple layout)
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Panel</title>
+    <title>Admin Dashboard - Super Mall</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f9f9f9;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #007bff;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      header nav {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      header nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        transition: opacity 0.3s;
+        cursor: pointer;
+      }
+
+      header nav a:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+      }
+
+      header nav button {
+        background-color: white;
+        color: #007bff;
+        border: none;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 4px;
+      }
+
+      .dashboard-container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 2rem;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 7rem;
+        border-radius: 8px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 1rem;
+        color: #888;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+      }
+    </style>
   </head>
+
   <body>
-    <h2>Admin Dashboard</h2>
-    <input type="text" id="shopName" placeholder="Shop Name" />
-    <input type="text" id="shopLocation" placeholder="Shop Location" />
-    <button onclick="createShop()">Add Shop</button>
+    <!-- Top Header Navigation -->
+    <header>
+      <h2>Super Mall Admin</h2>
+      <nav>
+        <a href="#" data-page="shops">🏪 Shops</a>
+        <a href="#" data-page="offers">💰 Offers</a>
+        <a href="#" data-page="products">🛍️ Products</a>
+        <a href="#" data-page="filters">🔍 Filters</a>
+        <button id="logoutBtn">Logout</button>
+      </nav>
+    </header>
 
-    <script type="module">
-      import { db } from "../firebase/firebase-config.js";
-      import {
-        collection,
-        addDoc,
-      } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-      import log from "./logging.js";
+    <!-- Dynamic Content Area -->
+    <div class="dashboard-container" id="mainContent">
+      <!-- Dynamic content will be loaded here -->
+    </div>
 
-      window.createShop = async function () {
-        const name = document.getElementById("shopName").value;
-        const location = document.getElementById("shopLocation").value;
+    <footer>
+      &copy; 2025 Super Mall Web Application. All rights reserved.
+    </footer>
 
-        try {
-          const docRef = await addDoc(collection(db, "shops"), {
-            name,
-            location,
-          });
-          log.info("Shop added:", name);
-          alert("Shop Created Successfully");
-        } catch (e) {
-          log.error("Error adding shop:", e);
-          alert("Failed to Create Shop");
-        }
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0LcTrTGPzDjR4WI4iIKjhxXcC8ugfGW8",
+        authDomain: "supermall-webapp-12ad5.firebaseapp.com",
+        projectId: "supermall-webapp-12ad5",
+        storageBucket: "supermall-webapp-12ad5.appspot.com",
+        messagingSenderId: "281411344748",
+        appId: "1:281411344748:web:ce23c84c710c7a58363b49",
+        measurementId: "G-QLMN69T00C",
       };
+
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      auth.onAuthStateChanged((user) => {
+        if (!user) window.location.href = "login.html";
+      });
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        auth.signOut().then(() => (window.location.href = "login.html"));
+      });
+    </script>
+
+    <!-- SPA Section Loader -->
+    <script>
+      function loadSection(page) {
+        fetch(`sections/${page}.html`)
+          .then((res) => res.text())
+          .then((html) => {
+            const mainContent = document.getElementById("mainContent");
+            mainContent.innerHTML = html;
+
+            // Re-execute <script> tags properly
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = html;
+
+            tempDiv.querySelectorAll("script").forEach((oldScript) => {
+              const newScript = document.createElement("script");
+
+              if (oldScript.src) {
+                newScript.src = oldScript.src;
+              } else {
+                newScript.textContent = oldScript.textContent;
+              }
+
+              // Preserve module type or others (e.g., application/json)
+              if (oldScript.type) newScript.type = oldScript.type;
+
+              // Append to body so it's executed
+              document.body.appendChild(newScript);
+            });
+          });
+      }
+
+      // Attach dynamic loading to nav links
+      document.querySelectorAll("nav a[data-page]").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const page = link.getAttribute("data-page");
+          loadSection(page);
+        });
+      });
+
+      // Load shops section on default page load
+      window.onload = () => loadSection("shops");
     </script>
   </body>
 </html>

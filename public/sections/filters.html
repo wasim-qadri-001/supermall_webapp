@@ -1,0 +1,86 @@
+<section>
+  <h3>Filter Shops</h3>
+  <form id="filterForm">
+    <input type="text" id="category" placeholder="Category" />
+    <input type="text" id="floor" placeholder="Floor" />
+    <button type="submit">Apply Filter</button>
+  </form>
+
+  <h3>Filtered Results</h3>
+  <ul id="filteredList"></ul>
+  <p id="noResults" style="color: red"></p>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config and Logic -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0LcTrTGPzDjR4WI4iIKjhxXcC8ugfGW8",
+      authDomain: "supermall-webapp-12ad5.firebaseapp.com",
+      projectId: "supermall-webapp-12ad5",
+      storageBucket: "supermall-webapp-12ad5.firebasestorage.app",
+      messagingSenderId: "281411344748",
+      appId: "1:281411344748:web:ce23c84c710c7a58363b49",
+      measurementId: "G-QLMN69T00C",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged((user) => {
+      if (!user) window.location.href = "login.html";
+    });
+
+    const filterForm = document.getElementById("filterForm");
+    const filteredList = document.getElementById("filteredList");
+    const noResults = document.getElementById("noResults");
+
+    filterForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      filteredList.innerHTML = "";
+      noResults.textContent = "";
+
+      const category = document
+        .getElementById("category")
+        .value.trim()
+        .toLowerCase();
+      const floor = document.getElementById("floor").value.trim().toLowerCase();
+
+      if (!category && !floor) {
+        noResults.textContent = "Please enter at least one filter to apply.";
+        return;
+      }
+
+      db.collection("shops")
+        .get()
+        .then((snapshot) => {
+          let found = false;
+          snapshot.forEach((doc) => {
+            const shop = doc.data();
+            const matchCategory = category
+              ? shop.category.toLowerCase() === category
+              : true;
+            const matchFloor = floor
+              ? shop.floor.toLowerCase() === floor
+              : true;
+
+            if (matchCategory && matchFloor) {
+              const li = document.createElement("li");
+              li.textContent = `${shop.name} - Floor: ${shop.floor}, Category: ${shop.category}`;
+              filteredList.appendChild(li);
+              found = true;
+            }
+          });
+
+          if (!found) {
+            noResults.textContent = "No shops found with the given filters.";
+          }
+        })
+        .catch((error) => {
+          noResults.textContent = "Error fetching shops: " + error.message;
+        });
+    });
+  </script>
+</section>

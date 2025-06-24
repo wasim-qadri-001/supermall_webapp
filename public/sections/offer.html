@@ -1,0 +1,17 @@
+<!-- sections/offer.html -->
+<section>
+  <h3>Add Offer</h3>
+  <form id="offerForm">
+    <input type="text" id="shopId" placeholder="Shop ID" required />
+    <input type="text" id="offerTitle" placeholder="Offer Title" required />
+    <input type="text" id="discount" placeholder="Discount %" required />
+    <input type="date" id="expiryDate" required />
+    <button type="submit">Add Offer</button>
+  </form>
+
+  <h3>Existing Offers</h3>
+  <ul id="offerList"></ul>
+
+  <!-- Load offer.js module -->
+  <script type="module" src="../js/offers.js"></script>
+</section>

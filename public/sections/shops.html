@@ -1,0 +1,86 @@
+<section>
+  <h3>Add New Shop</h3>
+  <form id="shopForm">
+    <input type="text" id="shopName" placeholder="Shop Name" required />
+    <input type="text" id="floor" placeholder="Floor" required />
+    <input type="text" id="category" placeholder="Category" required />
+    <button type="submit">Add Shop</button>
+  </form>
+
+  <h3>Shops List</h3>
+  <ul id="shopList"></ul>
+
+  <script>
+    const shopForm = document.getElementById("shopForm");
+    const shopList = document.getElementById("shopList");
+    let editShopId = null;
+
+    shopForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("shopName").value;
+      const floor = document.getElementById("floor").value;
+      const category = document.getElementById("category").value;
+
+      if (editShopId) {
+        db.collection("shops")
+          .doc(editShopId)
+          .update({ name, floor, category })
+          .then(() => {
+            alert("Shop updated!");
+            editShopId = null;
+            shopForm.reset();
+            loadShops();
+          });
+      } else {
+        db.collection("shops")
+          .add({ name, floor, category })
+          .then(() => {
+            alert("Shop added!");
+            shopForm.reset();
+            loadShops();
+          });
+      }
+    });
+
+    function loadShops() {
+      shopList.innerHTML = "";
+      db.collection("shops")
+        .get()
+        .then((snapshot) => {
+          snapshot.forEach((doc) => {
+            const shop = doc.data();
+            const li = document.createElement("li");
+            li.innerHTML = `
+              ${shop.name} - Floor: ${shop.floor}, Category: ${shop.category}
+              <button onclick="editShop('${doc.id}', '${shop.name}', '${shop.floor}', '${shop.category}')">Edit</button>
+              <button onclick="deleteShop('${doc.id}')">Delete</button>
+            `;
+            shopList.appendChild(li);
+          });
+        });
+    }
+
+    function editShop(id, name, floor, category) {
+      document.getElementById("shopName").value = name;
+      document.getElementById("floor").value = floor;
+      document.getElementById("category").value = category;
+      editShopId = id;
+    }
+
+    function deleteShop(id) {
+      if (confirm("Are you sure you want to delete this shop?")) {
+        db.collection("shops")
+          .doc(id)
+          .delete()
+          .then(() => {
+            alert("Shop deleted");
+            loadShops();
+          });
+      }
+    }
+
+    loadShops();
+  </script>
+</section>
+<script src="../js/auth.js" type="module"></script>
+<script src="../js/shop.js" type="module"></script>

@@ -1,5 +1,7 @@
 // shop.js
-import { db } from "../firebase/firebase-config.js";
+import { db } from "../../src/firebase/firebase-config.js";
+import log from "./logging.js";
+
 import {
   collection,
   getDocs,
@@ -16,4 +18,6 @@ async function displayShops() {
   });
 }
 
+log.info("New shop added:", shopData);
+log.error("Failed to fetch offers:", error);
 displayShops();

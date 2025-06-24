@@ -1,0 +1,138 @@
+<!-- public/product.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Products - Super Mall</title>
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <style>
+      .filter-section {
+        margin: 1rem 0;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Manage Products</h2>
+      <a href="admin.html">⬅ Back to Dashboard</a>
+
+      <section>
+        <h3>Add Product</h3>
+        <form id="productForm">
+          <input type="text" id="shopId" placeholder="Shop ID" required />
+          <input
+            type="text"
+            id="productName"
+            placeholder="Product Name"
+            required
+          />
+          <input type="number" id="price" placeholder="Price" required />
+          <input type="text" id="features" placeholder="Features" required />
+          <button type="submit">Add Product</button>
+        </form>
+      </section>
+
+      <section class="filter-section">
+        <h3>Filter Products</h3>
+        <input type="text" id="filterShopId" placeholder="Filter by Shop ID" />
+        <input
+          type="text"
+          id="filterProductName"
+          placeholder="Search Product Name"
+        />
+        <button id="filterBtn">Apply Filters</button>
+        <button id="resetBtn">Reset</button>
+      </section>
+
+      <section>
+        <h3>All Products</h3>
+        <ul id="productList"></ul>
+      </section>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyA0LcTrTGPzDjR4WI4iIKjhxXcC8ugfGW8",
+        authDomain: "supermall-webapp-12ad5.firebaseapp.com",
+        projectId: "supermall-webapp-12ad5",
+        storageBucket: "supermall-webapp-12ad5.firebasestorage.app",
+        messagingSenderId: "281411344748",
+        appId: "1:281411344748:web:ce23c84c710c7a58363b49",
+        measurementId: "G-QLMN69T00C",
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      auth.onAuthStateChanged((user) => {
+        if (!user) window.location.href = "login.html";
+      });
+
+      const productForm = document.getElementById("productForm");
+      const productList = document.getElementById("productList");
+
+      productForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const shopId = document.getElementById("shopId").value;
+        const name = document.getElementById("productName").value;
+        const price = document.getElementById("price").value;
+        const features = document.getElementById("features").value;
+
+        db.collection("products")
+          .add({ shopId, name, price, features, createdAt: new Date() })
+          .then(() => {
+            alert("Product added!");
+            productForm.reset();
+            loadProducts();
+          });
+      });
+
+      function loadProducts(filters = {}) {
+        productList.innerHTML = "";
+        let query = db.collection("products").orderBy("createdAt", "desc");
+
+        if (filters.shopId) {
+          query = query.where("shopId", "==", filters.shopId);
+        }
+
+        query.get().then((snapshot) => {
+          snapshot.forEach((doc) => {
+            const d = doc.data();
+            if (
+              filters.productName &&
+              !d.name.toLowerCase().includes(filters.productName.toLowerCase())
+            ) {
+              return;
+            }
+            const li = document.createElement("li");
+            li.textContent = `${d.name} (Shop: ${d.shopId}) - ₹${d.price} - ${d.features}`;
+            productList.appendChild(li);
+          });
+        });
+      }
+
+      document.getElementById("filterBtn").addEventListener("click", () => {
+        const shopId = document.getElementById("filterShopId").value;
+        const productName = document.getElementById("filterProductName").value;
+        loadProducts({ shopId, productName });
+      });
+
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        document.getElementById("filterShopId").value = "";
+        document.getElementById("filterProductName").value = "";
+        loadProducts();
+      });
+
+      window.onload = () => loadProducts();
+    </script>
+  </body>
+</html>
