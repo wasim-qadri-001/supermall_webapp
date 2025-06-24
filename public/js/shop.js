@@ -1,5 +1,5 @@
 // shop.js
-import { db } from "../../src/firebase/firebase-config.js";
+import { db } from "/js/firebase-config.js";
 import log from "./logging.js";
 
 import {
