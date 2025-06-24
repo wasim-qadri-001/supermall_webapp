@@ -1,5 +1,5 @@
 // src/js/utils.js
-
+import { db } from "../js/firebase-config.js";
 export function validateShopForm(name, location) {
   if (!name || name.trim().length < 3) {
     return {

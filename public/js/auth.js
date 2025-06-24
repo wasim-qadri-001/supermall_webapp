@@ -1,5 +1,5 @@
 // auth.js
-import { db } from "/js/firebase-config.js"; ✅
+import { db } from "../js/firebase-config.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 window.login = function () {
