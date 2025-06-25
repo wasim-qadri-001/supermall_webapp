@@ -1,0 +1,109 @@
+/* assets/css/style.css */
+
+/* Universal box-sizing for consistent layout */
+* {
+  box-sizing: border-box;
+}
+
+/* Define CSS Variables for consistent theming */
+:root {
+  --primary-color: #007bff;
+  --primary-dark: #0056b3;
+  --background-light: #f8f9fa;
+  --background-white: #ffffff;
+  --text-dark: #343a40;
+  --text-light: #f8f9fa;
+  --border-color: #dee2e6;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.15);
+  --error-color: #dc3545; /* Red for error messages */
+}
+
+/* Body Styling - Centers content vertically and horizontally */
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif; /* Ensure Roboto is linked in login.html head */
+  background-color: var(--background-light);
+  color: var(--text-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Full viewport height */
+  padding: 1rem; /* Padding for smaller screens */
+}
+
+/* Login Container Styling */
+.login-container {
+  background-color: var(--background-white);
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px var(--shadow-medium); /* Deeper shadow for prominence */
+  width: 100%;
+  max-width: 400px; /* Max width for the login form */
+  text-align: center;
+}
+
+/* Heading Styling */
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 1.8rem;
+  font-size: 2rem;
+}
+
+/* Form Input Styling */
+input[type="email"],
+input[type="password"] {
+  width: 100%; /* Full width within container */
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+/* Input Focus State */
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Blue glow on focus */
+  outline: none; /* Remove default outline */
+}
+
+/* Button Styling */
+button[type="submit"] {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: 100%; /* Full width within container */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Hover effects */
+}
+
+/* Button Hover State */
+button[type="submit"]:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+/* Error Message Styling */
+#loginError {
+  color: var(--error-color);
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1.5rem; /* Reduce padding on smaller screens */
+  }
+  h2 {
+    font-size: 1.8rem; /* Smaller heading font size */
+  }
+}

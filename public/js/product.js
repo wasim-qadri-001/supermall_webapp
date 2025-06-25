@@ -9,10 +9,51 @@ import {
   where,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const productForm = document.getElementById("productForm");
-  const productList = document.getElementById("productList");
+const productForm = document.getElementById("productForm");
+const productList = document.getElementById("productList");
+const filterBtn = document.getElementById("filterBtn");
+const resetBtn = document.getElementById("resetBtn");
 
+async function loadProducts(filters = {}) {
+  if (!productList) {
+    console.error("Product list element not found.");
+    return;
+  }
+  productList.innerHTML = "";
+  let baseQuery = collection(db, "products");
+  let productQuery = query(baseQuery, orderBy("createdAt", "desc"));
+
+  if (filters.shopId) {
+    productQuery = query(baseQuery, where("shopId", "==", filters.shopId));
+  }
+
+  try {
+    const snapshot = await getDocs(productQuery);
+    if (snapshot.empty) {
+      productList.innerHTML = "<li>No products available.</li>";
+    } else {
+      snapshot.forEach((docSnap) => {
+        const d = docSnap.data();
+        if (
+          filters.productName &&
+          !d.name.toLowerCase().includes(filters.productName.toLowerCase())
+        ) {
+          return;
+        }
+
+        const li = document.createElement("li");
+        li.textContent = `${d.name} (Shop: ${d.shopId}) - ₹${d.price} - ${d.features}`;
+        productList.appendChild(li);
+      });
+    }
+  } catch (error) {
+    console.error("Error loading products:", error);
+    productList.innerHTML = `<li style="color: red;">Error loading products.</li>`;
+  }
+}
+
+// Attach event listeners and call loadProducts only if elements exist
+if (productForm && productList) {
   productForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -43,49 +84,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  async function loadProducts(filters = {}) {
-    productList.innerHTML = "";
-    let baseQuery = collection(db, "products");
-    let productQuery = query(baseQuery, orderBy("createdAt", "desc"));
+  if (filterBtn) {
+    filterBtn.addEventListener("click", () => {
+      const filterShopId = document.getElementById("filterShopId");
+      const filterProductName = document.getElementById("filterProductName");
 
-    if (filters.shopId) {
-      productQuery = query(baseQuery, where("shopId", "==", filters.shopId));
-    }
+      const shopId = filterShopId ? filterShopId.value.trim() : "";
+      const productName = filterProductName
+        ? filterProductName.value.trim()
+        : "";
 
-    try {
-      const snapshot = await getDocs(productQuery);
-      snapshot.forEach((docSnap) => {
-        const d = docSnap.data();
-        if (
-          filters.productName &&
-          !d.name.toLowerCase().includes(filters.productName.toLowerCase())
-        ) {
-          return;
-        }
-
-        const li = document.createElement("li");
-        li.textContent = `${d.name} (Shop: ${d.shopId}) - ₹${d.price} - ${d.features}`;
-        productList.appendChild(li);
-      });
-    } catch (error) {
-      console.error("Error loading products:", error);
-      alert("Error loading products.");
-    }
+      loadProducts({ shopId, productName });
+    });
+  } else {
+    console.warn("Filter button not found.");
   }
 
-  document.getElementById("filterBtn").addEventListener("click", () => {
-    const shopId = document.getElementById("filterShopId").value.trim();
-    const productName = document
-      .getElementById("filterProductName")
-      .value.trim();
-    loadProducts({ shopId, productName });
-  });
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      const filterShopId = document.getElementById("filterShopId");
+      const filterProductName = document.getElementById("filterProductName");
 
-  document.getElementById("resetBtn").addEventListener("click", () => {
-    document.getElementById("filterShopId").value = "";
-    document.getElementById("filterProductName").value = "";
-    loadProducts();
-  });
+      if (filterShopId) filterShopId.value = "";
+      if (filterProductName) filterProductName.value = "";
+      loadProducts();
+    });
+  } else {
+    console.warn("Reset button not found.");
+  }
 
+  // Initial load of products when the script runs
   loadProducts();
-});
+} else {
+  console.error(
+    "Product form or product list not found. Check product.html structure."
+  );
+}

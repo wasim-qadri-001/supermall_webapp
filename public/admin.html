@@ -4,78 +4,298 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Super Mall</title>
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="icon" href="/favicon.ico" />
+    <!-- Google Fonts - Roboto for a clean, modern look -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
-      body {
-        margin: 0;
-        font-family: "Segoe UI", sans-serif;
-        background-color: #f9f9f9;
+      /* Universal box-sizing for consistent layout */
+      * {
+        box-sizing: border-box;
       }
 
+      :root {
+        --primary-color: #007bff;
+        --primary-dark: #0056b3;
+        --secondary-color: #6c757d;
+        --background-light: #f8f9fa;
+        --background-white: #ffffff;
+        --text-dark: #343a40;
+        --text-light: #f8f9fa;
+        --border-color: #dee2e6;
+        --shadow-light: rgba(0, 0, 0, 0.08);
+        --shadow-medium: rgba(0, 0, 0, 0.15);
+      }
+
+      body {
+        margin: 0;
+        font-family: "Roboto", sans-serif;
+        background-color: var(--background-light);
+        color: var(--text-dark);
+        line-height: 1.6;
+      }
+
+      /* Header Styling */
       header {
         position: fixed;
         top: 0;
         width: 100%;
-        background: #007bff;
-        color: white;
-        padding: 1rem 2rem;
+        background: var(--primary-color);
+        color: var(--text-light);
+        padding: 1rem 2rem; /* This padding might be an issue on very small screens */
         display: flex;
         justify-content: space-between;
         align-items: center;
         z-index: 1000;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px var(--shadow-medium);
       }
 
       header h2 {
         margin: 0;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 500;
       }
 
       header nav {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 1.5rem; /* Increased gap for better spacing */
       }
 
       header nav a {
-        color: white;
+        color: var(--text-light);
         text-decoration: none;
-        font-weight: 600;
-        transition: opacity 0.3s;
+        font-weight: 500;
+        padding: 0.5rem 0.8rem;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
         cursor: pointer;
       }
 
       header nav a:hover {
-        opacity: 0.8;
-        text-decoration: underline;
+        background-color: var(--primary-dark);
+        transform: translateY(-2px); /* Subtle lift effect */
+      }
+      /* Active navigation link style */
+      header nav a.active {
+        background-color: var(--primary-dark);
       }
 
       header nav button {
-        background-color: white;
-        color: #007bff;
+        background-color: var(--text-light);
+        color: var(--primary-color);
         border: none;
-        padding: 6px 12px;
+        padding: 0.6rem 1.2rem;
         cursor: pointer;
-        font-weight: bold;
-        border-radius: 4px;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease,
+          transform 0.2s ease;
       }
 
+      header nav button:hover {
+        background-color: var(--secondary-color);
+        color: var(--text-light);
+        transform: translateY(-2px);
+      }
+
+      /* Dashboard Container */
       .dashboard-container {
-        max-width: 1000px;
+        max-width: 1100px; /* Slightly wider container */
         margin: auto;
-        padding: 2rem;
-        background-color: #ffffff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 7rem;
-        border-radius: 8px;
+        padding: 2.5rem; /* Increased padding */
+        background-color: var(--background-white);
+        box-shadow: 0 0 20px var(--shadow-light); /* Softer, larger shadow */
+        margin-top: 8rem; /* More space from fixed header */
+        border-radius: 10px; /* More rounded corners */
+        min-height: calc(
+          100vh - 15rem
+        ); /* Ensure it takes up most of the viewport height */
       }
 
+      /* General Section Styling (for dynamically loaded content) */
+      section {
+        padding: 1.5rem 0;
+      }
+
+      section h3 {
+        font-size: 1.7rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+      }
+
+      /* Form Styling */
+      form {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(250px, 1fr)
+        ); /* Responsive grid for form fields */
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: var(--background-light);
+      }
+
+      form label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+        color: var(--text-dark);
+      }
+
+      form input[type="text"],
+      form input[type="number"],
+      form input[type="date"],
+      form select {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box; /* Include padding in width */
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      form input[type="text"]:focus,
+      form input[type="number"]:focus,
+      form input[type="date"]:focus,
+      form select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        outline: none;
+      }
+
+      form button[type="submit"] {
+        grid-column: 1 / -1; /* Span full width */
+        background-color: var(--primary-color);
+        color: var(--text-light);
+        border: none;
+        padding: 0.9rem 1.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      form button[type="submit"]:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+      }
+
+      /* List Styling */
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      ul li {
+        background-color: var(--background-white);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 0.8rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px var(--shadow-light);
+        transition: transform 0.2s ease;
+      }
+
+      ul li:hover {
+        transform: translateY(-3px);
+      }
+
+      ul li strong {
+        color: var(--primary-color);
+        font-weight: 500;
+      }
+
+      ul li button {
+        background-color: var(--secondary-color);
+        color: var(--text-light);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      ul li button:hover {
+        background-color: #5a6268; /* Darker secondary */
+        transform: translateY(-1px);
+      }
+
+      /* Specific button colors for Edit/Delete */
+      ul li button:first-of-type {
+        /* Edit button */
+        background-color: #28a745; /* Green */
+      }
+      ul li button:first-of-type:hover {
+        background-color: #218838;
+      }
+
+      ul li button:last-of-type {
+        /* Delete button */
+        background-color: #dc3545; /* Red */
+      }
+      ul li button:last-of-type:hover {
+        background-color: #c82333;
+      }
+
+      /* Footer Styling */
       footer {
         text-align: center;
-        padding: 1rem;
-        color: #888;
+        padding: 1.5rem;
+        color: var(--secondary-color);
         font-size: 0.9rem;
         margin-top: 2rem;
+        background-color: var(--background-white);
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 -2px 5px var(--shadow-light);
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          padding: 1rem; /* Reduced padding for smaller screens */
+          gap: 1rem; /* Gap between h2 and nav */
+        }
+        header nav {
+          width: 100%; /* Ensure nav takes full available width */
+          flex-wrap: wrap; /* Allow nav items to wrap */
+          justify-content: center; /* Center nav items */
+          gap: 0.8rem; /* Reduced gap for nav items */
+        }
+        .dashboard-container {
+          margin-top: 10rem; /* Adjust for taller header */
+          padding: 1.5rem;
+        }
+        form {
+          grid-template-columns: 1fr; /* Stack form fields on small screens */
+        }
+      }
+      /* Further adjustments for very small screens if needed */
+      @media (max-width: 480px) {
+        header h2 {
+          font-size: 1.5rem; /* Smaller font for header title */
+        }
+        header nav a,
+        header nav button {
+          padding: 0.4rem 0.6rem; /* Smaller padding for nav items */
+          font-size: 0.85rem; /* Smaller font for nav items */
+        }
       }
     </style>
   </head>
@@ -94,7 +314,7 @@
     </header>
 
     <!-- Dynamic Content Area -->
-    <div class="dashboard-container" id="mainContent">
+    <div class="dashboard-container" id="main-content">
       <!-- Dynamic content will be loaded here -->
     </div>
 
@@ -121,59 +341,88 @@
 
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
-      const db = firebase.firestore();
+      const db = firebase.firestore(); // db is now globally accessible
 
       auth.onAuthStateChanged((user) => {
         if (!user) window.location.href = "login.html";
       });
 
       document.getElementById("logoutBtn").addEventListener("click", () => {
-        auth.signOut().then(() => (window.location.href = "login.html"));
+        auth.signOut().then(() => (window.location.href = "index.html"));
       });
     </script>
 
     <!-- SPA Section Loader -->
     <script>
       function loadSection(page) {
+        console.log("Requested page:", page); // DEBUG
+
+        // Remove any previously loaded scripts to prevent re-execution issues
+        const oldScript = document.querySelector("script[data-loaded-script]");
+        if (oldScript) {
+          oldScript.remove();
+        }
+
         fetch(`sections/${page}.html`)
-          .then((res) => res.text())
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.text();
+          })
           .then((html) => {
-            const mainContent = document.getElementById("mainContent");
-            mainContent.innerHTML = html;
+            const container = document.getElementById("main-content");
+            container.innerHTML = html;
 
-            // Re-execute <script> tags properly
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = html;
+            // Correct script mapping
+            const scriptMap = {
+              shops: "shops",
+              offer: "offer",
+              product: "product",
+              filters: "filters", // Ensure this matches your filters.js filename
+            };
 
-            tempDiv.querySelectorAll("script").forEach((oldScript) => {
-              const newScript = document.createElement("script");
-
-              if (oldScript.src) {
-                newScript.src = oldScript.src;
-              } else {
-                newScript.textContent = oldScript.textContent;
-              }
-
-              // Preserve module type or others (e.g., application/json)
-              if (oldScript.type) newScript.type = oldScript.type;
-
-              // Append to body so it's executed
-              document.body.appendChild(newScript);
-            });
+            const actualScriptName = scriptMap[page];
+            if (actualScriptName) {
+              const script = document.createElement("script");
+              script.type = "module"; // Keep type="module" for ES module imports
+              script.src = `/js/${actualScriptName}.js?v=${Date.now()}`; // Cache busting
+              script.setAttribute("data-loaded-script", page); // Mark script for removal
+              document.body.appendChild(script);
+            } else {
+              console.warn(`No script mapping found for page: ${page}`);
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading section:", error);
+            document.getElementById(
+              "main-content"
+            ).innerHTML = `<p style="color: red;">Failed to load section: ${page}. Please try again.</p>`;
           });
       }
 
-      // Attach dynamic loading to nav links
+      // Navigation click event
       document.querySelectorAll("nav a[data-page]").forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
           const page = link.getAttribute("data-page");
           loadSection(page);
+
+          // Optional: Add active class to navigation links
+          document
+            .querySelectorAll("nav a[data-page]")
+            .forEach((navLink) => navLink.classList.remove("active"));
+          link.classList.add("active");
         });
       });
 
-      // Load shops section on default page load
-      window.onload = () => loadSection("shops");
+      // Load default section and set active class
+      window.onload = () => {
+        loadSection("shops");
+        document
+          .querySelector('nav a[data-page="shops"]')
+          .classList.add("active");
+      };
     </script>
   </body>
 </html>

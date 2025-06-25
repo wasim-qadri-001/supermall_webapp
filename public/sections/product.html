@@ -23,23 +23,4 @@
   <h3>All Products</h3>
   <ul id="productList"></ul>
 </section>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyA0LcTrTGPzDjR4WI4iIKjhxXcC8ugfGW8",
-    authDomain: "supermall-webapp-12ad5.firebaseapp.com",
-    projectId: "supermall-webapp-12ad5",
-    storageBucket: "supermall-webapp-12ad5.firebasestorage.app",
-    messagingSenderId: "281411344748",
-    appId: "1:281411344748:web:ce23c84c710c7a58363b49",
-    measurementId: "G-QLMN69T00C",
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  auth.onAuthStateChanged((user) => {
-    if (!user) window.location.href = "login.html";
-  });
-</script>
 <script type="module" src="../js/product.js"></script>
