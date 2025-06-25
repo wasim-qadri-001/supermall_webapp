@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Super Mall</title>
     <link rel="icon" href="/favicon.ico" />
-    <!-- Google Fonts - Roboto for a clean, modern look -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* Universal box-sizing for consistent layout */
       * {
         box-sizing: border-box;
       }
@@ -38,14 +36,13 @@
         line-height: 1.6;
       }
 
-      /* Header Styling */
       header {
         position: fixed;
         top: 0;
         width: 100%;
         background: var(--primary-color);
         color: var(--text-light);
-        padding: 1rem 2rem; /* This padding might be an issue on very small screens */
+        padding: 1rem 2rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -62,7 +59,7 @@
       header nav {
         display: flex;
         align-items: center;
-        gap: 1.5rem; /* Increased gap for better spacing */
+        gap: 1.5rem;
       }
 
       header nav a {
@@ -77,9 +74,8 @@
 
       header nav a:hover {
         background-color: var(--primary-dark);
-        transform: translateY(-2px); /* Subtle lift effect */
+        transform: translateY(-2px);
       }
-      /* Active navigation link style */
       header nav a.active {
         background-color: var(--primary-dark);
       }
@@ -102,21 +98,17 @@
         transform: translateY(-2px);
       }
 
-      /* Dashboard Container */
       .dashboard-container {
-        max-width: 1100px; /* Slightly wider container */
+        max-width: 1100px;
         margin: auto;
-        padding: 2.5rem; /* Increased padding */
+        padding: 2.5rem;
         background-color: var(--background-white);
-        box-shadow: 0 0 20px var(--shadow-light); /* Softer, larger shadow */
-        margin-top: 8rem; /* More space from fixed header */
-        border-radius: 10px; /* More rounded corners */
-        min-height: calc(
-          100vh - 15rem
-        ); /* Ensure it takes up most of the viewport height */
+        box-shadow: 0 0 20px var(--shadow-light);
+        margin-top: 8rem;
+        border-radius: 10px;
+        min-height: calc(100vh - 15rem);
       }
 
-      /* General Section Styling (for dynamically loaded content) */
       section {
         padding: 1.5rem 0;
       }
@@ -129,13 +121,9 @@
         padding-bottom: 0.5rem;
       }
 
-      /* Form Styling */
       form {
         display: grid;
-        grid-template-columns: repeat(
-          auto-fit,
-          minmax(250px, 1fr)
-        ); /* Responsive grid for form fields */
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
         padding: 1.5rem;
@@ -160,7 +148,7 @@
         border: 1px solid var(--border-color);
         border-radius: 5px;
         font-size: 1rem;
-        box-sizing: border-box; /* Include padding in width */
+        box-sizing: border-box;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
       }
 
@@ -174,7 +162,7 @@
       }
 
       form button[type="submit"] {
-        grid-column: 1 / -1; /* Span full width */
+        grid-column: 1 / -1;
         background-color: var(--primary-color);
         color: var(--text-light);
         border: none;
@@ -191,7 +179,6 @@
         transform: translateY(-2px);
       }
 
-      /* List Styling */
       ul {
         list-style: none;
         padding: 0;
@@ -232,28 +219,24 @@
       }
 
       ul li button:hover {
-        background-color: #5a6268; /* Darker secondary */
+        background-color: #5a6268;
         transform: translateY(-1px);
       }
 
-      /* Specific button colors for Edit/Delete */
       ul li button:first-of-type {
-        /* Edit button */
-        background-color: #28a745; /* Green */
+        background-color: #28a745;
       }
       ul li button:first-of-type:hover {
         background-color: #218838;
       }
 
       ul li button:last-of-type {
-        /* Delete button */
-        background-color: #dc3545; /* Red */
+        background-color: #dc3545;
       }
       ul li button:last-of-type:hover {
         background-color: #c82333;
       }
 
-      /* Footer Styling */
       footer {
         text-align: center;
         padding: 1.5rem;
@@ -265,43 +248,40 @@
         box-shadow: 0 -2px 5px var(--shadow-light);
       }
 
-      /* Responsive Adjustments */
       @media (max-width: 768px) {
         header {
           flex-direction: column;
-          padding: 1rem; /* Reduced padding for smaller screens */
-          gap: 1rem; /* Gap between h2 and nav */
+          padding: 1rem;
+          gap: 1rem;
         }
         header nav {
-          width: 100%; /* Ensure nav takes full available width */
-          flex-wrap: wrap; /* Allow nav items to wrap */
-          justify-content: center; /* Center nav items */
-          gap: 0.8rem; /* Reduced gap for nav items */
+          width: 100%;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.8rem;
         }
         .dashboard-container {
-          margin-top: 10rem; /* Adjust for taller header */
+          margin-top: 10rem;
           padding: 1.5rem;
         }
         form {
-          grid-template-columns: 1fr; /* Stack form fields on small screens */
+          grid-template-columns: 1fr;
         }
       }
-      /* Further adjustments for very small screens if needed */
       @media (max-width: 480px) {
         header h2 {
-          font-size: 1.5rem; /* Smaller font for header title */
+          font-size: 1.5rem;
         }
         header nav a,
         header nav button {
-          padding: 0.4rem 0.6rem; /* Smaller padding for nav items */
-          font-size: 0.85rem; /* Smaller font for nav items */
+          padding: 0.4rem 0.6rem;
+          font-size: 0.85rem;
         }
       }
     </style>
   </head>
 
   <body>
-    <!-- Top Header Navigation -->
     <header>
       <h2>Super Mall Admin</h2>
       <nav>
@@ -313,21 +293,16 @@
       </nav>
     </header>
 
-    <!-- Dynamic Content Area -->
-    <div class="dashboard-container" id="main-content">
-      <!-- Dynamic content will be loaded here -->
-    </div>
+    <div class="dashboard-container" id="main-content"></div>
 
     <footer>
       &copy; 2025 Super Mall Web Application. All rights reserved.
     </footer>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
 
-    <!-- Firebase Configuration -->
     <script>
       const firebaseConfig = {
         apiKey: "AIzaSyA0LcTrTGPzDjR4WI4iIKjhxXcC8ugfGW8",
@@ -341,23 +316,29 @@
 
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
-      const db = firebase.firestore(); // db is now globally accessible
+      const db = firebase.firestore();
 
       auth.onAuthStateChanged((user) => {
-        if (!user) window.location.href = "login.html";
+        const currentPage = window.location.pathname;
+        if (
+          !user &&
+          currentPage !== "/index.html" &&
+          currentPage !== "/login.html"
+        ) {
+          window.location.href = "login.html";
+        }
       });
 
       document.getElementById("logoutBtn").addEventListener("click", () => {
-        auth.signOut().then(() => (window.location.href = "index.html"));
+        auth.signOut().then(() => {
+          window.location.href = "index.html";
+        });
       });
     </script>
 
-    <!-- SPA Section Loader -->
     <script>
       function loadSection(page) {
-        console.log("Requested page:", page); // DEBUG
-
-        // Remove any previously loaded scripts to prevent re-execution issues
+        console.log("Requested page:", page);
         const oldScript = document.querySelector("script[data-loaded-script]");
         if (oldScript) {
           oldScript.remove();
@@ -374,20 +355,19 @@
             const container = document.getElementById("main-content");
             container.innerHTML = html;
 
-            // Correct script mapping
             const scriptMap = {
               shops: "shops",
               offer: "offer",
               product: "product",
-              filters: "filters", // Ensure this matches your filters.js filename
+              filters: "filters",
             };
 
             const actualScriptName = scriptMap[page];
             if (actualScriptName) {
               const script = document.createElement("script");
-              script.type = "module"; // Keep type="module" for ES module imports
-              script.src = `/js/${actualScriptName}.js?v=${Date.now()}`; // Cache busting
-              script.setAttribute("data-loaded-script", page); // Mark script for removal
+              script.type = "module";
+              script.src = `/js/${actualScriptName}.js?v=${Date.now()}`;
+              script.setAttribute("data-loaded-script", page);
               document.body.appendChild(script);
             } else {
               console.warn(`No script mapping found for page: ${page}`);
@@ -401,14 +381,12 @@
           });
       }
 
-      // Navigation click event
       document.querySelectorAll("nav a[data-page]").forEach((link) => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
           const page = link.getAttribute("data-page");
           loadSection(page);
 
-          // Optional: Add active class to navigation links
           document
             .querySelectorAll("nav a[data-page]")
             .forEach((navLink) => navLink.classList.remove("active"));
@@ -416,7 +394,6 @@
         });
       });
 
-      // Load default section and set active class
       window.onload = () => {
         loadSection("shops");
         document
